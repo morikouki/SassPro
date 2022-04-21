@@ -1,0 +1,376 @@
+@charset "UTF-8";
+/* Sassの基本 */
+/* ーーーーーネストーーーーーーー */
+#main section {
+  margin-bottom: 50px; }
+  #main section h1 {
+    font-size: 140px; }
+  #main section p,
+  #main section ul {
+    margin-bottom: 1.5rem; }
+  #main section p.notes {
+    color: red; }
+
+/* ーーーーーーーー@mediaのネストーーーーーーーーー */
+#main {
+  float: left;
+  width: 640px; }
+  @media screen and (max-width: 640px) {
+    #main {
+      float: none;
+      width: auto; } }
+
+/* ーーーーーーーー&：アンパサンドーーーーーーーー*/
+/* 親セレクタを参照できるもの。*/
+/* 親セレクタが勝手に「&」という変数に入っているようなイメージ */
+#side {
+  width: 240px; }
+  body.top #side {
+    width: 300px; }
+  #side ul.bnr {
+    margin-bottom: 10px; }
+
+a {
+  text-decoration: none; }
+  a:hover {
+    text-decoration: underline; }
+
+ul.pageNav li {
+  margin: 0;
+  width: 50%; }
+  ul.pageNav li.prev {
+    float: left; }
+  ul.pageNav li.next {
+    float: right; }
+
+.block {
+  width: 500px; }
+  .block .block__element {
+    margin-bottom: 2em; }
+    .block .block__element--modifier {
+      background-color: #f00; }
+
+/* ーーーーーーーープロパティのネストーーーーーーーー*/
+.sample {
+  border-top: 5px solid #ccc;
+  border-bottom-width: 3px;
+  border-bottom-style: dotted;
+  border-bottom-color: black; }
+
+.item {
+  margin: 0;
+    margin-left: 10px;
+  border: 1px solid #999;
+    border-bottom: 0; }
+
+/* ーーーーーーーー変数ーーーーーーーー*/
+/*「$」で変数を宣言できる。phpみたいなイメージ */
+.notes, .item samll {
+  color: #cf2d3a; }
+
+.notesBox {
+  padding: 20px;
+  border: 3px double #cf2d3a; }
+
+/* {}の中にも変数は宣言できる。{}の外からは参照できないが、、ローカル変数のようなイメージ */
+.item {
+  margin-left: 15px;
+  padding: 15px; }
+  .item p {
+    margin-bottom: 15px; }
+
+/* セレクタ名やbackgroundプロパティのurl()などに変数はそのまま書いても参照できない */
+.main, .body {
+  background: url(../img/logo/logo.png); }
+
+/* ーーーーーーーー演算ーーーーーーーーー */
+/* Javaなどと同じように演算できる */
+article {
+  width: 546px;
+  padding: 7px; }
+
+.exsample {
+  width: 1600px; }
+
+.box, .item {
+  width: 486px;
+  padding: 0 7px; }
+
+p::after {
+  content: "今日は、寒いです。";
+  font-family: sans-serif; }
+
+/*ーーーーーーーーインポートーーーーー*/
+/*
+
+@import url("main.scss");
+@import url(main.scss);
+@import "main.scss";
+@import "main.scss";
+
+// 複数指定
+@import "defalut", "module", "btn";
+
+// セレクタの中に書くこともできる
+.section {
+  @import "style";
+}
+
+*/
+/* ーーーーーーーーースタイルの継承ーーーーーーーーー*/
+.box, .item {
+  margin: 0 0 30px;
+  padding: 15px;
+  border: 1px solid #ccc; }
+
+.notes, .item samll {
+  color: #d92c25;
+  font-weight: bold;
+  text-align: center; }
+
+.bd, .item samll {
+  border-top: 1px solid #900;
+  border-bottom: 1px solid #900; }
+
+.item samll {
+  display: block;
+  padding: 10px; }
+
+/* 連鎖させて継承することが可能 */
+/* .notesは.attと.attBoxを継承していることになる */
+.att, .attBox, .notes, .item samll {
+  color: red;
+  font-weight: normal; }
+
+.attBox, .notes, .item samll {
+  padding: 15px;
+  border: 1px solid red; }
+
+/* 以下のセレクタはエクステンドして使用できる
+
+.class {} クラスセレクタ
+smalle {} タイプセレクタ
+#selectorID {} IDセレクタ
+.pd.bd {} 連結セレクタ
+input[type="text"] {} 属性セレクタ
+a:hover {} 擬似クラス
+p::first-line {} 擬似要素
+
+*/
+/* エクステンド専用のプレースホルダーセレクタ */
+.item, section {
+  padding: 15px;
+  border: 1px solid #999; }
+
+.item {
+  margin-bottom: 20px; }
+
+section {
+  margin-top: 20px; }
+
+/* @mediaの中で使用するには@mediaの中で定義する必要がある */
+/* @mediaの中で定義した@extendは@mediaの外で使用することはできる */
+@media all and (orientation: landscape) {
+  a, .btn {
+    display: inline-block;
+    padding: 5px 10px; } }
+/* ーーーーーーーーミックスインーーーーーーーー */
+.relatedArea {
+  padding: 15px;
+  background: #999;
+  color: white; }
+
+.relatedAreahikisuu {
+  border: 1px solid red; }
+
+.box, .item {
+  border-radius: 5px;
+  margin: 20px; }
+
+/*
+  @content ルールセットやスタイルなどのコンテントブロックミックスインに渡す機能
+  渡されたルールセットやスタイルは、@contentが書かれた位置で展開される。
+  メディアクエリなどを何度も使用する際などに便利
+*/
+.item .image {
+  float: left; }
+  @media only screen and (max-width: 500px) {
+    .item .image {
+      float: none; } }
+.item .text {
+  overflow: hidden;
+  margin-left: 15px; }
+  @media only screen and (max-width: 500px) {
+    .item .text {
+      margin-left: 0; } }
+
+/* ーーーーー@at-root ルートに戻すーーーーーーーー*/
+.block .element-A {
+  width: 80%; }
+.element-B {
+  width: 100%; }
+
+.block .element-A {
+  width: 80%; }
+.element-B {
+  width: 100%; }
+
+.element-C {
+  width: 50%; }
+
+.block {
+  width: 50%; }
+  @media (max-width: 640px) {
+    .block {
+      width: 100%; }
+      .item {
+        margin-bottom: 30px; } }
+
+/* ーーーーーーーーデータタイプーーーーー*/
+.DataTypes {
+  /* Number型 */
+  property: number;
+  /* Color型 */
+  property: color;
+  /* String型 */
+  property: string;
+  /* Boolean型 */
+  property: bool;
+  /* Null型 */
+  property: null;
+  /* List型 */
+  property: list;
+  /* Map型 */
+  property: map;
+  /* Function型 */
+  property: function; }
+
+/* ーーーーーー条件分岐ーーーーー*/
+.fl {
+  float: left; }
+
+.fr {
+  float: right; }
+
+.box, .item {
+  margin: 0 auto; }
+
+.throuthSample_1 {
+  margin-top: 1px; }
+
+.throuthSample_2 {
+  margin-top: 2px; }
+
+.throuthSample_3 {
+  margin-top: 3px; }
+
+.mt_20 {
+  margin: 20px; }
+
+.mt_10 {
+  margin: 10px; }
+
+.body-top {
+  background-image: url(../img/bg_top.png); }
+
+.body-about {
+  background-image: url(../img/bg_about.png); }
+
+.body-company {
+  background-image: url(../img/bg_company.png); }
+
+.body-contact {
+  background-image: url(../img/bg_contact.png); }
+
+/* ーーーーーーーーー関数一覧ーーーーー */
+.box, .item {
+  margin: 15px; }
+
+.box, .item {
+  width: 17%; }
+
+.box, .item {
+  width: 34%; }
+
+.box, .item {
+  width: 16%; }
+
+body {
+  background: rgba(106, 84, 104, 0.3); }
+
+body {
+  background: ligthen(#000, 30%); }
+
+body {
+  background: #b3b3b3; }
+
+body {
+  background: gray; }
+
+.item {
+  background: url(about); }
+
+.sns-twitter {
+  color: #fff; }
+
+.item .image {
+  float: left; }
+
+/* ーーーーー自作関数ーーーーー*/
+.boxA {
+  width: 50px; }
+
+.boxA {
+  width: 53px; }
+
+.boxB {
+  width: 100px; }
+
+/* ーーーーーテストやデバッグーーーーーー */
+.boxA {
+  width: 0px; }
+
+.box, .item {
+  width: 1000px; }
+
+/* ーーーーーーーインターポレーションーーーーーー */
+p.sampleA {
+  font: 0.4; }
+
+p.sampleA {
+  font: 12px/30px; }
+
+.mt0 {
+  margin-top: 0px; }
+
+.mt5 {
+  margin-top: 5px; }
+
+.CSS a::after {
+  content: "CSSTips"; }
+
+.CSS a::after {
+  content: CSSTips; }
+
+/* ーーーーーー変数の振る舞いをコントロールーーーーーーーー*/
+.boxA {
+  width: 320px;
+  height: 50%; }
+
+.boxB {
+  width: 100vw;
+  height: 80px; }
+
+.boxA {
+  width: 33.3%;
+  height: 50%; }
+
+.boxB {
+  width: 100vw;
+  height: 50vw; }
+
+.boxC {
+  width: 33.3%;
+  height: 80px; }
+
+/*# sourceMappingURL=sample.css.map */

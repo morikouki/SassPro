@@ -1,0 +1,727 @@
+/* Sassの基本 */
+/* ーーーーーネストーーーーーーー */
+#main {
+  section {
+    margin-bottom: 50px;
+    h1 {
+      font-size: 140px;
+    }
+    p,
+    ul {
+      margin-bottom: 1.5rem;
+    }
+    p.notes {
+      color: red;
+    }
+  }
+}
+
+/* ーーーーーーーー@mediaのネストーーーーーーーーー */
+#main {
+  float: left;
+  width: 640px;
+  @media screen and (max-width: 640px) {
+    float: none;
+    width: auto;
+  }
+}
+
+/* ーーーーーーーー&：アンパサンドーーーーーーーー*/
+/* 親セレクタを参照できるもの。*/
+/* 親セレクタが勝手に「&」という変数に入っているようなイメージ */
+#side {
+  width: 240px;
+  body.top & {
+    width: 300px;
+  }
+  ul.bnr {
+    margin-bottom: 10px;
+  }
+}
+
+a {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+ul.pageNav {
+  li {
+    margin: 0;
+    width: 50%;
+    &.prev {
+      float: left;
+    }
+    &.next {
+      float: right;
+    }
+  }
+}
+
+.block {
+  width: 500px;
+  & &__element {
+    margin-bottom: 2em;
+    &--modifier {
+      background-color: #f00;
+    }
+  }
+}
+
+/* ーーーーーーーープロパティのネストーーーーーーーー*/
+
+.sample {
+  border: {
+    top: 5px solid #ccc;
+    bottom: {
+      width: 3px;
+      style: dotted;
+      color: black;
+    }
+  }
+}
+
+.item {
+  margin: 0 {
+    left: 10px;
+  }
+  border: 1px solid #999 {
+    bottom: 0;
+  }
+}
+
+/* ーーーーーーーー変数ーーーーーーーー*/
+/*「$」で変数を宣言できる。phpみたいなイメージ */
+$red: #cf2d3a;
+
+.notes {
+  color: $red;
+}
+
+.notesBox {
+  padding: 20px;
+  border: 3px double $red;
+}
+
+/* {}の中にも変数は宣言できる。{}の外からは参照できないが、、ローカル変数のようなイメージ */
+.item {
+  $value: 15px;
+  margin-left: $value;
+  padding: $value;
+  p {
+    margin-bottom: $value;
+  }
+}
+
+/* セレクタ名やbackgroundプロパティのurl()などに変数はそのまま書いても参照できない */
+$selecta: ".main, .body";
+$img_path: "../img/logo/";
+
+#{$selecta} {
+  background: url(#{$img_path}logo.png);
+}
+
+/* ーーーーーーーー演算ーーーーーーーーー */
+/* Javaなどと同じように演算できる */
+article {
+  // 引き算
+  width: 560px - 14px;
+  padding: 7px;
+}
+
+.exsample {
+  // 掛け算
+  width: 200px * 8;
+}
+
+// 変数の利用もできる
+$main_width: 500px;
+.box {
+  width: $main_width - 7 * 2;
+  padding: 0 7px;
+}
+
+// テキストの結合もできる
+p::after {
+  content: "今日は、" + 寒いです。;
+  font-family: sans- + "serif";
+}
+
+/*ーーーーーーーーインポートーーーーー*/
+// 下記のいずれかの書き方ができる。実際にインポート先ファイルを作成していないのでコメントアウト
+/*
+
+@import url("main.scss");
+@import url(main.scss);
+@import "main.scss";
+@import "main.scss";
+
+// 複数指定
+@import "defalut", "module", "btn";
+
+// セレクタの中に書くこともできる
+.section {
+  @import "style";
+}
+
+*/
+
+/* ーーーーーーーーースタイルの継承ーーーーーーーーー*/
+.box {
+  margin: 0 0 30px;
+  padding: 15px;
+  border: 1px solid #ccc;
+}
+
+.item {
+  @extend .box;
+}
+
+.notes {
+  color: #d92c25;
+  font-weight: bold;
+  text-align: center;
+}
+
+.bd {
+  border-top: 1px solid #900;
+  border-bottom: 1px solid #900;
+}
+
+// 複数継承
+.item {
+  samll {
+    display: block;
+    padding: 10px;
+    @extend .notes;
+    @extend .bd;
+  }
+}
+
+/* 連鎖させて継承することが可能 */
+/* .notesは.attと.attBoxを継承していることになる */
+.att {
+  color: red;
+  font-weight: normal;
+}
+
+.attBox {
+  @extend .att;
+  padding: 15px;
+  border: 1px solid red;
+}
+
+.notes {
+  @extend .attBox;
+}
+
+/* 以下のセレクタはエクステンドして使用できる
+
+.class {} クラスセレクタ
+smalle {} タイプセレクタ
+#selectorID {} IDセレクタ
+.pd.bd {} 連結セレクタ
+input[type="text"] {} 属性セレクタ
+a:hover {} 擬似クラス
+p::first-line {} 擬似要素
+
+*/
+
+/* エクステンド専用のプレースホルダーセレクタ */
+// 「%」をつけることで、エクステンド専用として作成できる。
+// これによりcssにコンパイルした際にエクステンドしたところだけ実装することができる
+
+%boxBase {
+  padding: 15px;
+  border: 1px solid #999;
+}
+
+.item {
+  @extend %boxBase;
+  margin-bottom: 20px;
+}
+
+section {
+  @extend %boxBase;
+  margin-top: 20px;
+}
+
+/* @mediaの中で使用するには@mediaの中で定義する必要がある */
+/* @mediaの中で定義した@extendは@mediaの外で使用することはできる */
+
+// エラー
+// %errorBtnBase {
+//   display: inline-block;
+//   padding: 5px 10px;
+// }
+
+// @media all and (orientation: landscape) {
+//   a {
+//     @extend %errorBtnBase;
+//   }
+// }
+
+@media all and (orientation: landscape) {
+  %btnBase {
+    display: inline-block;
+    padding: 5px 10px;
+  }
+  a {
+    @extend %btnBase;
+  }
+}
+
+.btn {
+  @extend %btnBase;
+}
+
+// !optional フラグを使用すればエクステンドを定義してなくてもエラーにならない。継承もされない
+.btn {
+  @extend %optional !optional;
+}
+
+/* ーーーーーーーーミックスインーーーーーーーー */
+// スタイルの集まりを定義しておき、それを他の場所で呼び出して使うことができるというもの
+// また、引数を指定することも可能
+// 関数みたいなイメージ
+
+// ミックスインを定義
+@mixin boxSet {
+  padding: 15px;
+  background: #999;
+  color: white;
+}
+
+// 定義したミックスインの呼び出し
+.relatedArea {
+  @include boxSet;
+}
+
+// 引数を使用したミックスインの定義
+@mixin kadomaru($vlaue) {
+  border: 1px $vlaue red;
+}
+
+// 使用
+.relatedAreahikisuu {
+  @include kadomaru(solid);
+}
+
+// 引数に初期値を定義
+@mixin maru($value: 5px) {
+  border: $value solid red;
+}
+
+// 引数を複数指定。初期値をしないとエラーになる
+@mixin sikaku($value: 5px, $margin: 10px) {
+  border-radius: $value;
+  margin: $margin;
+}
+
+// 第2引数の値だけ指定
+.box {
+  @include sikaku($margin: 20px);
+}
+
+/*
+  @content ルールセットやスタイルなどのコンテントブロックミックスインに渡す機能
+  渡されたルールセットやスタイルは、@contentが書かれた位置で展開される。
+  メディアクエリなどを何度も使用する際などに便利
+*/
+@mixin media($width-media: 768px) {
+  @media only screen and (max-width: $main_width) {
+    @content;
+  }
+}
+
+.item {
+  .image {
+    float: left;
+    @include media {
+      float: none;
+    }
+  }
+  .text {
+    overflow: hidden;
+    margin-left: 15px;
+    @include media {
+      margin-left: 0;
+    }
+  }
+}
+
+/* ーーーーー@at-root ルートに戻すーーーーーーーー*/
+.block {
+  .element-A {
+    width: 80%;
+  }
+  @at-root .element-B {
+    width: 100%;
+  }
+}
+
+.block {
+  .element-A {
+    width: 80%;
+  }
+  @at-root {
+    .element-B {
+      width: 100%;
+    }
+    .element-C {
+      width: 50%;
+    }
+  }
+}
+
+// メディアクエリないで使用した場合
+.block {
+  width: 50%;
+  @media (max-width: 640px) {
+    width: 100%;
+    @at-root {
+      .item {
+        margin-bottom: 30px;
+      }
+    }
+  }
+}
+
+/* ーーーーーーーーデータタイプーーーーー*/
+// type-ofはデータ型を返す。if文なんかでも使用できる
+.DataTypes {
+  /* Number型 */
+  property: type-of(10%);
+
+  /* Color型 */
+  property: type-of(red);
+
+  /* String型 */
+  property: type-of(sans-serif);
+
+  /* Boolean型 */
+  property: type-of(true);
+
+  /* Null型 */
+  property: type-of(null);
+
+  /* List型 */
+  property: type-of(1.5em 1em 0 2em);
+
+  /* Map型 */
+  $map: (
+    key1: value1,
+    key2: value2,
+  );
+  property: type-of($map);
+
+  /* Function型 */
+  property: type-of(get-function("lighten"));
+}
+
+/* ーーーーーー条件分岐ーーーーー*/
+
+// if文
+$generalStyle: true;
+
+@if $generalStyle {
+  .fl {
+    float: left;
+  }
+  .fr {
+    float: right;
+  }
+}
+
+$getStyle: 0;
+@mixin style {
+  @if $getStyle == 1 {
+    margin: 0 0 30px;
+    padding: 15px;
+  } @else if $getStyle == 2 {
+    margin: 5px 5px 10px;
+    padding: 10px;
+  } @else {
+    margin: 0 auto;
+  }
+}
+
+.box {
+  @include style();
+}
+
+// for文
+// @for 変数名 from 開始の数値 through 終了の数値
+@for $value from 1 through 3 {
+  .throuthSample_#{$value} {
+    margin-top: 1px * $value;
+  }
+}
+
+// while文
+// @while 繰り替えしを継続する条件
+$value: 20;
+@while $value > 0 {
+  .mt_#{$value} {
+    margin: $value + px;
+  }
+  $value: $value - 10;
+}
+
+// リスト（配列）の要素に対して繰り返し処理
+// @each 変数名 in リスト
+$nameList: top, about, company, contact;
+@each $name in $nameList {
+  .body-#{$name} {
+    background-image: url(../img/bg_#{$name}.png);
+  }
+}
+
+/* ーーーーーーーーー関数一覧ーーーーー */
+
+// 数値の絶対値を取得する
+$margin: -15px;
+.box {
+  margin: abs($margin);
+}
+
+// 数値の小数点以下を四捨五入する
+$width: 100%;
+.box {
+  width: round($width / 6);
+}
+
+// 小数点切り上げ
+.box {
+  width: ceil($width / 3);
+}
+
+// 小数点切り捨て
+.box {
+  width: floor($width / 6);
+}
+
+// 16進数のRGB値に透明度を指定して、RGBA形式に変換
+body {
+  background: rgba(#6a5468, 0.3);
+}
+
+// 明るい色を作る
+body {
+  background: ligthen(#000, 30%);
+}
+
+// 暗い色を作る
+body {
+  background: darken(#fff, 30%);
+}
+
+// 2つのカラーコードの中間色を作る
+body {
+  background: mix(#000, #fff, 50%);
+}
+
+// リストのN番目の値を取得
+$nameList: top, about, company;
+.item {
+  background: url(#{nth($list: $nameList, $n: 2)});
+}
+
+// 指定したキーの値を取得する
+$colors: (
+  twitter: #fff,
+  facebook: #000,
+);
+
+.sns-twitter {
+  color: map-get($colors, twitter);
+}
+
+// 2つのマップを結合
+// map-merge($map1, $map2);
+
+// 指定したキーを削除
+// map-remove($map, $keys..);
+
+// マップのキーをリスト形式でかイエス
+// map-keys($map);
+
+// マップの値をリスト形式で返す
+// map-values($map);
+
+// キーの有無を調べる
+// map-has-key($map, $key);
+
+// 可変長引数を渡して、新しいマップを返す
+// keywords($args);
+
+// セレクタを置換する
+#{selector-replace(".item .text", ".text", ".image")} {
+  float: left;
+}
+
+/* ーーーーー自作関数ーーーーー*/
+
+// 下記のように定義する
+// @function 自作関数名($引数) {
+//     @return 戻り値;
+// }
+
+@function halfSize($value) {
+  @return $value / 2;
+}
+
+.boxA {
+  width: halfSize(100px);
+}
+
+// 引数に初期値を設定
+$width: 105px;
+@function halfSize($value: $width) {
+  @return round($value / 2);
+}
+
+.boxA {
+  width: halfSize();
+}
+
+.boxB {
+  width: halfSize(200px);
+}
+
+/* ーーーーーテストやデバッグーーーーーー */
+
+// @degugで結果を確認
+// コンパイル(sass sample.scss sample.css)したらコマンドラインに結果が表示される
+@debug 10em + 12em;
+
+// 関数で使用
+$value: 500;
+@function debugTest() {
+  @debug $value;
+  $value: $value - 100;
+  $value: $value - 100;
+  @debug $value;
+  $value: $value - 300;
+  @debug $value;
+  @return $value + px;
+}
+
+.boxA {
+  width: debugTest();
+}
+
+// @warnで警告を表示する
+
+$value: 1000px;
+@function warnTest() {
+  // unitless関数で単位があるか無いかを判断
+  @if unitless($value) {
+    $value: $value + px;
+  } @else {
+    @warn "#{value}は駄目! $valueに単位入れないで!";
+  }
+  @return $value;
+}
+
+.box {
+  width: warnTest();
+}
+
+// @errorでエラーを出力し処理を中断する
+$value: 1000px;
+@function errorTest() {
+  @if unitless($value) {
+    $value: $value + px;
+  } @else {
+    @error "#{value}は駄目! $valueに単位入れないで!";
+  }
+  @return $value;
+}
+
+/* ーーーーーーーインターポレーションーーーーーー */
+
+// 変数に使える #{} これのこと
+// 使い所に合わせて補完してくれる
+
+// 演算しないようにする
+// 下記だと演算される
+p.sampleA {
+  $font-size: 12px;
+  $line-height: 30px;
+  font: $font-size/$line-height;
+}
+
+// 下記だとされない
+p.sampleA {
+  $font-size: 12px;
+  $line-height: 30px;
+  font: #{$font-size}/#{$line-height};
+}
+
+// 演算できない場所で演算する
+// 本来セレクタで変数を参照することはできないが、インターポレーションを使い、その中で演算を行うとちゃんと演算してくれる。
+@for $i from 0 to 2 {
+  .mt#{$i * 5} {
+    margin-top: 5px * $i;
+  }
+}
+
+// アンクォートしてくれるインターポレーション
+// "(ダブルクォーテーション)が二重にならないようにアンクォーとをしてくれる
+$text: "CSS";
+.#{$text} a::after {
+  content: "#{$text + Tips}";
+}
+
+// 下記はインターポレーションしてないが上記と同じ結果になる
+$text: CSS;
+.#{$text} a::after {
+  content: $text + Tips;
+}
+
+/* ーーーーーー変数の振る舞いをコントロールーーーーーーーー*/
+
+// !default フラグ
+// デフォルト値を設定するフラグ
+$width: 320px;
+$height: 80px;
+
+.boxA {
+  $width: 33.3% !default;
+  $height: 50%;
+  width: $width; // グローバル$widthを参照
+  height: $height; // ローカル$heightを参照
+}
+
+.boxB {
+  $width: 100vw;
+  $height: 50vw !default;
+  width: $width; // ローカル$widthを参照
+  height: $height; // グローバル$heightを参照
+}
+
+// !global フラグ
+// ローカル変数をグローバル変数にするフラグ
+$width: 320px;
+$height: 80px;
+
+.boxA {
+  $width: 33.3% !global;
+  $height: 50%;
+  width: $width; // 上書きされたグローバル$widthを参照
+  height: $height; // グローバル$heightを参照
+}
+
+.boxB {
+  $width: 100vw;
+  $height: 50vw;
+  width: $width; // ローカル$widthを参照
+  height: $height; // ローカル$heightを参照
+}
+
+.boxC {
+  width: $width; // 上書きされたグローバル$widthを参照
+  height: $height; // グローバル$heightを参照
+}
